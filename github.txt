@@ -1,0 +1,191 @@
+gitBin一、首先如何用你的终端在你的github上创建一个项目
+   1.这时候创建你的工作区域
+    mkdir 目录名   //创建目录
+    touch 文件名   //创建文件名
+    vim 文件名      //编译文件名(当你进入vim编辑器的时候，首先会进入不可编辑状态，按c开启编辑状态，ESC退出编辑状态，再加大写的ZZ返回原有的命令界面)
+
+   2.首先需要设置一下你的用户名和邮箱作为你上传的身份依据（只需要设置一次）
+   git config --global user.name "用户名"
+   git config --global user.email "邮箱"
+   你可以用 git config --global user.name 去查看你的用户名
+
+   3.将你的本地仓库初始化，变为能让git进行管理的代码库
+     git init //在当前目录新建一个Git代码库
+     git init 目录名 //新建一个目录，将其初始化为git代码库
+     git clone 你要下载的url //下载一个项目和它整个代码历史
+
+   4.将你的文件添加到暂存区
+      git add 文件名1 文件名2 文件名3..... //将指定的文件添加到缓存区
+      git add 目录名  //添加指定目录到缓存区
+      git add .  //将当前目录的所有子文件添加到缓存区
+      git add -p //对于同一个文件的多处变化，可以实现分次提交
+      git rm 文件名1 文件名2 ....  //删除工作区文件，并且将这次删除放入暂存区
+      git rm --cached 文件名    //停止追踪指定文件，但该文件会保留在工作区
+      git mv 原文件名 新文件名  //修改文件名，并将改的文件放入到暂存区
+
+     5.将你在缓存区的文件提交到本地仓库 （注释信息不能为空）
+      git commit -m "注释信息"  //将暂存区的所有文件提交到本地仓库
+      git commit 文件名1 文件名2 .... -m "注释信息" //提交暂存区的指定文件到仓库区
+      使用一次新的commit,替代上一次提交
+      git commit --amend //修改最近一次提交的注释信息
+      git commit --amend -m "注释信息"  //如果代码没有任何新的变化，则用来修改上一次commit的提交信息
+      git commit --amend 文件名1 文件名2.... //重做上一次commit，并包括指定文件的新变化
+     
+     6.将本地仓库关联到Github上
+      git  remote add origin url
+       如果出现fatel:remote origin already exists
+      那就先输入git remote rm origin 去删除这个origin
+      再输入git remote add origin url
+
+     7.如果在往github上创建仓库时新建了README需要先pull到本地进行合并（将远程库中指定分支下的所有更新         pull下来与本地合并）
+       git pull --rebase origin master   //master是默认分支，你可以去设定你指定的分支
+   
+     8.最后一步，将代码由本地仓库上传到github远程仓库
+       git push -u origin master //master是默认分支，你可以去设定你指定的分支
+
+二.创建分支
+     1.查看分支
+       git branch //查看所有本地分支
+       git branch -r //列出所有远程分支
+       git branch -a  // 列出所有本地分支和远程分支
+
+     2.创建分支
+       git branch 分支名  //创建一个分支，但依然停留在当前分支
+       git checkout 分支名 //切换到指定的分支 并更新工作区
+       git checkout -b 分支名 //创建一个分支并切换到该分支
+       git branch 分支名 注释信息 //新建一个分支，并指定注释
+       git branch --track 新建分支名  远程分支名 //新建一个分支，与指定的远程分支建立追踪关系
+       git checkout -  //切换到上一个分支
+       git branch --set-upstream 分支名  远程分支名 //建立追踪关系，在现有分支与指定的远程分支之间
+       git merge 分支名  //合并指定分支到当前分支
+       git cherry-pick 注释信息 // 选择一个commit，合并到当前分支
+
+     3.删除分支
+       git branch -d 分支名
+
+     4.删除远程分支
+        git push origin --delete 分支名
+        git push branch -dr 远程库名/远程分支名
+
+三.删除分支中指定的文件
+     拉取远程仓库到本地
+     git clone url
+     cd  远程仓库文件夹名
+     
+     查看分支
+     git branch -a //本地和远程库的分支
+  
+     切换到想要操作的分支
+     git checkout 想要操作的分支
+
+     在本地仓库删除文件
+     git rm 我的文件
+
+      在本地仓库删除文件夹
+      git rm -r 我的文件夹/ 此处-r表示递归所有子目录，如果你要删除的，是空的文件夹，此处可以不用带上-r
+
+      提交我的我的文件
+      git commit -m '我的修改'
+
+      推送到远程仓库
+      git push origin 想要操作的分支
+四、从远程仓库拉取项目下来
+   
+   如果你想在一个空的文件夹里去从新拉取项目:
+   mkdir 文件夹名
+   Touch 文件名     
+   vim 文件名
+   git init
+   git checkout -b 远程库对应的分支名
+   git add .
+   git commit -m "建议"
+   git remote add origin 远程库名 
+   git pull --rebase origin 远程分支名
+
+   如果是已有项目然后拉取项目：
+   git add .
+   git commit -m "说明"
+   git pull --rebase origin 远程分支名
+   
+
+   存在冲突只可能两个或者多个人跟你修改了同样的并在你之前提交了，pull 下来后....
+
+    
+五、版本回退
+   Git log  查看提交日志
+   git reset --hard HEAD^ 上一个版本HEAD~100是回退到历史的一百个版本
+   git reflog 查看命令历史查看
+   git reset --hard commit_id  返回到未来的莫个版本  7位
+   
+
+五、撤销修改
+   1、当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改，用命令 git checkout -- file
+   2、当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步：
+      git reset HEAD 文件名
+      git checkout -- 文件名
+   3、如果你提交到了版本库也就是 commit后，还是可以通过版本回退进行撤销
+六、删除文件
+   如果是删除工作区的文件
+   rm file
+   如果是想删除版本库里的文件
+   git rm file
+   如果误删了工作区的文件，可以通过
+   git checkout -- test.txt 恢复到最新版本
+七、创建合并分支
+   留一个主分支专门用来 pull和 push 项目，开发和修改都是在其他的子分支，千万千万不要在主分支开发
+   git checkout -b 分支名1
+   git merge 分支名1
+   git branch -d 分支名1
+八、解决冲突
+   当分之合并的时候，如果子分支修改文件的同时，主分支的也对同样的文件进行了修改那么合并的时候就会有冲突
+   报错：
+   Auto-merging readme.txt
+   CONFLICT(content):Merge conflict in 冲突的文件名
+   Automatic merge failed ; fix conflicts and then commit the result.
+
+   解决方法：
+   手动修改两边冲突的内容；然后在执行
+   git add 文件名
+   git commit -m "conflict fixed"
+   git log --graph 可以查看分之合并图
+   最后删除子分支
+九、bug 分之
+   如果我们在开发的过程中，遇到了要修复 bug，过程
+   git stash  //此时不需要你去 git add or git commit,它可以把你的工作现场储存起来
+   git checkout master
+   git checkout -b bug分之名
+   解决 bug....git add /git commit
+   git merge bug分支名
+   git branch -d bug分支名
+   git checkout 开发分之
+   git stash list 查看工作现场
+   git stash pop 恢复现场 
+
+   如果你多次 stash，那么可以恢复指定的 stash
+   git stash list 
+   Git stash apply stash@{0}
+十、feature 分之
+   开发一个新的 feature，最好新建一个分之；
+   如果要丢弃一个没有被合并过的分支，可以通过 git branch -D 分之名 强行删除（git add/git commit 后）
+十一、多人协作
+   当我们的项目开发完并且合并到本地主分支了，
+   git push origin 远程分支名
+   当有人提前 push 了项目，并且和你修改的文件是同一个，那么就会报错：
+
+   Error:failed to push some refs to 'url'....
+   
+   解决办法是：git pull 把最新的项目拉取下来（此时创建一个新的分之，来装载拉下来的项目），然后合并，解决冲突，    再push。
+   
+   如果git pull失败，且报错：
+   there is no tracking information for current branch
+   原因是没有指定本地 dev 分之与远程分之的链接，解决：
+   git branch --set-upstream-to=origin/远程分支名 本地分之名
+   再git pull
+   肯定会有冲突，手动解决冲突，并 add commit 后，merge.
+十二、提交部分文件
+Git add 指定文件名
+git stash -u -k  //忽略其他的文件
+git commit -m ""
+git pull 
+Git push 
+Git stash pop //恢复文件
