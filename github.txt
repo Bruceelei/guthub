@@ -189,3 +189,5 @@ git commit -m ""
 git pull 
 Git push 
 Git stash pop //恢复文件
+
+--leijiaqi
